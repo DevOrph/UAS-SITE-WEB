@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Université Africaine des Sciences - Education</title>
+        <!-- Lien vers le fichier CSS -->
+        <link rel="stylesheet" href="styles.css">
+        <!-- Lien vers le fichier JavaScript pour le carousel -->
+        <script defer src="script.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <header>
+            <div class="logo">Université Africaine des Sciences <span>Excellence Académique</span></div>
+            <nav>
+                <ul>
+                    <li>Accueil</li>
+                    <li>Cours</li>
+                    <li>Anciens Élèves et Dons</li>
+                    <li>Étudiants UAS</li>
+                    <li>Nouvelles</li>
+                    <li>Carrières</li>
+                    <li>Recherche</li>
+                </ul>
+            </nav>
+        </header>
+<body>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(to right, #ff0000, #FFA500, #ffff00);
+            padding: 1rem;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 80px;
+            background: white;
+            padding: 1rem;
+            z-index: 999;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #3474eb;
+            background: white;
+            color: #3474eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .filter-btn:hover {
+            background: #3474eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #3474eb;
+            color: white;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-overlay-content {
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .section-title {
+            color: #3474eb;
+            font-size: 2rem;
+            text-align: center;
+            margin: 3rem 0 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .register-form {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .register-form.hidden {
+            transform: translateX(120%);
+        }
+
+        .register-form input {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .register-btn {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 4px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background: #ff6347;
+            transform: translateY(-2px);
+        }
+
+        .toggle-form-btn {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .register-form {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                top: auto;
+                transform: translateY(100%);
+                margin: 0;
+                border-radius: 1rem 1rem 0 0;
+            }
+            
+            .register-form.hidden {
+                transform: translateY(100%);
+            }
+
+            .register-form.visible {
+                transform: translateY(0);
+            }
+
+            .toggle-form-btn {
+                display: block;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .filter-buttons {
+                top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <main class="main-content">
+        <h1>Notre Université en Images</h1>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">Tout voir</button>
+            <button class="filter-btn" data-category="droit">Droit</button>
+            <button class="filter-btn" data-category="sante">Santé</button>
+            <button class="filter-btn" data-category="business">Business School</button>
+            <button class="filter-btn" data-category="polytechnique">Polytechnique</button>
+        </div>
+
+        [Les styles et le reste du code HTML restent identiques jusqu'à la section gallery]
+
+        <div class="gallery">
+            <!-- Droit -->
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Amphithéâtre de Droit">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Amphithéâtre Principal</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Bibliothèque de Droit">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Bibliothèque Juridique</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle de Conférence">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Conférence</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle de Travail">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Travail</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Cour Extérieure">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Cour Extérieure</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle des Professeurs">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle des Professeurs</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Centre de Documentation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Centre de Documentation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Espace Détente">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Espace Détente</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Santé -->
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Laboratoire Médical">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Laboratoire Médical</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Salle d'Anatomie">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle d'Anatomie</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Centre de Simulation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Centre de Simulation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Bibliothèque Médicale">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Bibliothèque Médicale</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Laboratoire de Recherche">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Laboratoire de Recherche</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Salle de Consultation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Consultation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Amphithéâtre Médecine">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Amphithéâtre Médecine</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business School -->
+            [Structure similaire pour Business School avec 8 images]
+
+            <!-- Polytechnique -->
+            [Structure similaire pour Polytechnique avec 8 images]
+        </div>
+
+            [Les styles et le reste du code HTML restent identiques jusqu'à la section gallery]
+
+        <div class="gallery">
+            <!-- Droit -->
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Amphithéâtre de Droit">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Amphithéâtre Principal</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Bibliothèque de Droit">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Bibliothèque Juridique</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle de Conférence">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Conférence</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle de Travail">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Travail</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Cour Extérieure">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Cour Extérieure</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Salle des Professeurs">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle des Professeurs</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Centre de Documentation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Centre de Documentation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="droit">
+                <img src="/api/placeholder/400/500" alt="Espace Détente">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Espace Détente</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Santé -->
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Laboratoire Médical">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Laboratoire Médical</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Salle d'Anatomie">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle d'Anatomie</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Centre de Simulation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Centre de Simulation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Bibliothèque Médicale">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Bibliothèque Médicale</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Laboratoire de Recherche">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Laboratoire de Recherche</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Salle de Consultation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Salle de Consultation</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Amphithéâtre Médecine">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Amphithéâtre Médecine</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-item" data-category="sante">
+                <img src="/api/placeholder/400/500" alt="Centre de Formation">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h3>Centre de Formation</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business School -->
+            [Structure similaire pour Business School avec 8 images]
+
+            <!-- Polytechnique -->
+            [Structure similaire pour Polytechnique avec 8 images]
+        </div>
+
+[Le reste du code HTML et JavaScript reste identique]
+            <!-- [5 images pour chaque filière comme demandé] -->
+            <!-- Répétez la structure pour chaque filière avec 5 images -->
+        </div>
+    </main>
+
+    <button class="toggle-form-btn">📝</button>
+
+    <aside class="register-form hidden">
+        <h3>Créez votre compte</h3>
+        <form id="registerForm">
+            <input type="text" placeholder="Votre Nom" required>
+            <input type="email" placeholder="Email" required>
+            <input type="tel" placeholder="Téléphone" required>
+            <button type="submit" class="register-btn">Inscrivez-vous Maintenant</button>
+        </form>
+    </aside>
+
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <img src="" alt="Image en plein écran">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.gallery-item');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const registerForm = document.querySelector('.register-form');
+            const toggleFormBtn = document.querySelector('.toggle-form-btn');
+            const modal = document.querySelector('.modal');
+            const modalImg = modal.querySelector('img');
+            const closeModal = modal.querySelector('.close-modal');
+
+            // Animation initiale des éléments
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('visible');
+                }, index * 100);
+            });
+
+            // Filtrage des images
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    items.forEach(item => {
+                        item.classList.remove('visible');
+                        setTimeout(() => {
+                            if (category === 'all' || item.dataset.category === category) {
+                                item.style.display = 'block';
+                                setTimeout(() => {
+                                    item.classList.add('visible');
+                                }, 10);
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        }, 300);
+                    });
+                });
+            });
+
+            // Gestion du formulaire mobile
+            toggleFormBtn.addEventListener('click', () => {
+                registerForm.classList.toggle('hidden');
+                registerForm.classList.toggle('visible');
+            });
+
+            // Gestion du formulaire d'inscription
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Ajoutez ici la logique d'inscription
+                alert('Inscription envoyée !');
+            });
+
+            // Gestion du modal pour les images
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const imgSrc = item.querySelector('img').src;
+                    modalImg.src = imgSrc;
+                    modal.classList.add('active');
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+
+            // Gestion du défilement
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > lastScroll) {
+                    registerForm.classList.add('hidden');
+                } else {
+                    registerForm.classList.remove('hidden');
+                }
+                lastScroll = currentScroll;
+            });
+        });
+    </script>
+</body>
+</html>
